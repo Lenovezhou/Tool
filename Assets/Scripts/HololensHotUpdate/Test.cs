@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 
 #if NETFX_CORE  //UWP下编译  
+using Windows.Networking.Connectivity;
+using Windows.Networking;
 using Windows.Storage;  
 using Windows.Storage.Streams;
 using System.IO;
@@ -19,7 +21,10 @@ public class Test : MonoBehaviour
 
     void Start()
     {
+#if NETFX_CORE
+
         ReadData();
+#endif
         ReadIp();
     }
 
@@ -63,14 +68,15 @@ public class Test : MonoBehaviour
 
 
 
+
+#if NETFX_CORE
+
     /// <summary>
     ///Hololens读取浏览器上的文件
     /// </summary>
-    private void ReadData()
+    private async void ReadData()
     {
-#if !NETFX_CORE
-        GameObject.Find("Canvas/Text").GetComponent<Text>().text = "Test";
-#else
+
         StorageFolder docLib = ApplicationData.Current.LocalFolder;
         // var docFile = docLib.OpenStreamForReadAsync("\\Test20170815.txt");
         // 获取应用程序数据存储文件夹
@@ -84,6 +90,8 @@ public class Test : MonoBehaviour
         GameObject.Find("Canvas/Text").GetComponent<Text>().text  = Encoding.UTF8.GetString(content, 0, content.Length);
        
 
-#endif
     }
+
+#endif
+
 }
